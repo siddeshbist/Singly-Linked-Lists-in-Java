@@ -1,0 +1,336 @@
+Siddesh Bist
+400072076
+L07
+SLLNode and SLLSet
+
+package lab05;
+
+/**
+ *
+ * @Siddesh Bist
+ */
+public class SLLNode { 
+    int value;      //private instance field in class SLLNode
+    SLLNode next;
+    public SLLNode(int i,SLLNode n) //constructor
+    {
+        value =i;
+        next=n;
+    }
+    
+}
+
+package lab05;
+
+/**
+ *
+ * @Siddesh Bist
+ */
+
+public class SLLSet {
+    private int size; //private instance field size initialized
+    private SLLNode head; //dumby header initialized
+
+public SLLSet()
+    {
+         size=0;
+         head=new SLLNode(0,null); //creates empty set of size zero with dumby header
+    }
+
+public SLLSet(int [] sortedArray)
+    {
+        head=new SLLNode(0,null); //creates dumby header
+        head.next= new SLLNode(sortedArray[0],null); //value after dumby header is the first value in the array
+        SLLNode a= head.next; //node p pointing to head.next
+	this.size=sortedArray.length;
+	int i=1;
+        while(i<size)            
+        {
+            a.next= new SLLNode(sortedArray[i],null); //new node created containing every element in array
+            a=a.next; //progresses through the list
+	    i++;
+        }
+    }
+
+ public boolean isIn(int v)
+    {
+      SLLNode u; //node pointing to current set
+      for(u=head.next;u!=null;u=u.next)
+      {
+          if(u.value==v) 
+          {
+              return true; //if v found as value of node u then true returned
+          }
+              
+      }
+      return false; //return false if v not found in set
+    }
+
+public SLLSet copy()
+    {
+        
+	SLLNode b; //create node b
+        SLLNode cp = copy.head;  //node pointing to head of copy
+	SLLSet copy = new SLLSet(); 
+        copy.size= size; //get size of copy set
+        copy.head= new SLLNode(0,null); //head of copy set created as dumby header
+        b=head.next;//inital condition of while loop
+        while(b!=null) //stopping condition of while loop
+        {
+            cp.next = new SLLNode(b.value,null); // create a new node in copy with value of from current set
+            cp = cp.next;  //cp refers to next node to continue progression through list
+	    b=b.next; //proceeds to next iteration of while loop
+        }
+        return copy; //copied set returned
+    }
+
+
+public int getSize()
+    {
+        return size; //method returns size
+    }
+
+
+public void remove (int v)
+     {
+         SLLNode d; //node d points to this set
+	 d=head; //initial condition of while loop
+	 while(d!=null) //stopping condition of while loop
+             {
+                 if(d.next==null) //element not found in list as node d has progressed all the way to end so escapt
+                 {
+                     d=d.next;
+                     break;
+		          
+                 }
+                 else if (d.next.value==v)
+                 {
+                     d.next=d.next.next; //removes element by skipping over node which has value eqal to v
+                     size--; //decrease set size by 1
+	             d=d.next; //progress through this set
+                     break; 
+                 }
+             }
+         }
+
+
+public void add(int v)
+    {
+        SLLNode d = head; //node points to head of current set
+        
+        if(head.next.value>v) //checks whether first value of dumby header is bigger than v
+        {
+            d.next=new SLLNode(v,head.next);//v placed in first position
+            size++; //size of set increased
+        }
+        else
+        {
+	d=head;//initial condition of while loop
+	while(d!=null)
+        {
+           
+        if(d.next.value>v) //finds value bigger than v
+            {
+                d.next= new SLLNode (v,d.next); //inputs v right before first value bigger than it
+                size++; // increase size of list
+		d=d.next; //proceeds to next iteration of while loop
+                break;
+            }     
+        if(d.next==null) //v is bigger than every element in set
+            {
+                d.next=new SLLNode(v,null); //adds v at the end of the set
+                size++; //increases size of set
+		d=d.next;
+                break;
+                      
+            }
+            
+        if(d.value==v)
+            {
+                d=d.next;
+                break; //if v is found in this set nothing is done
+            }
+        }
+       
+        
+    }
+    }
+
+public SLLSet union(SLLSet s)
+    {
+    SLLNode w=this.head;//node for current set
+    SLLNode sr =s.head; //node for set s
+    SLLSet result= new SLLSet();//union set
+    SLLNode presult= result.head;//union set node
+    
+    
+    if (sr.next==null)
+    {
+        return this.copy(); //if s is empty then this set is returned
+    }
+
+    else if(w.next==null)
+    {
+        return s; //input set s returned is this set is empty
+    }
+    
+    else{
+    while( w.next!=null && sr.next!=null)
+    {
+        if (w.next.value<sr.next.value) //check if input set s next value is bigger than this set next value
+    {
+        presult.next = new SLLNode(p.next.value,null);//new node for union set created containing smaller value
+        presult=presult.next;//union node moves to next node
+        result.size++;//size of union set increased by 1
+        w=w.next;// this sets node moved to next node
+        
+
+    }
+
+else if (w.next.value==sr.next.value)//current input set and s input set hava same value
+    	{
+   	 presult.next=new SLLNode(sr.next.value,null); //new union set node created containing the value
+   	 presult=presult.next;//union set node moved to next node
+    	w=w.next; //current set node moved to next node
+    	sr=sr.next;//input set node moved to next node
+    	result.size++;//size of union set increased by 1
+    
+}
+        else if(w.next.value>sr.next.value)
+	{
+	presult.next=new SLLNode(sr.next.value,null);//new node for union set created containing smaller value
+	presult= presult.next;//union node moves to next node
+	result.size++;//size of union set increased by 1
+	sr=sr.next;//input s node moved to next node
+	}
+
+     
+
+}
+    }
+
+
+if(sr.next==null) //check to see if next node after dumby header in set s points to null
+{
+while(w.next!=null)
+{
+presult.next= new SLLNode(w.value,w.next); //copies values from this set into union set
+result.size++;//size of union set increased by 1
+w=w.next; //node in this set moved to next node
+}
+}
+
+elseif (w.next==null) //checks to see if next node after dumby header in this set points to null
+{
+    while(sr.next!=null) 
+{
+presult.next=new SLLNode(sr.value,sr.next);//copies all the elements in input set s to union set 
+result.size++;//increses size of union set
+sr=sr.next;//input set s node moved to next position
+}
+}
+
+return result;// return union set
+}
+
+
+
+public static SLLSet union(SLLSet[]array)
+{
+SLLSet result= new SLLSet(); //create new SLLSet
+int i=0;
+while(i<array.length) //loops through array
+{
+    result=result.union(array[i]); //updates result each time
+    i++; //proceed to next iteration
+}
+return result; //returns union
+}
+
+
+public SLLSet intersection (SLLSet s)
+{
+
+    SLLNode w=this.head;//node for current set
+    SLLNode sr =s.head; //node for set s
+    SLLSet result= new SLLSet();//intersection set
+    SLLNode presult= result.head;//intersection set node
+    
+
+while( w.next!=null && sr.next!=null)//loops through current set and set s
+{
+if (sr.next.value>w.next.value)
+{
+w=w.next;//node of smaller value moved to next position
+}
+else if (w.next.value==sr.next.value) //intersection occurs
+{
+presult.next=new SLLNode(w.next.value,null); //intersection occurs so new node created containing value of current element
+sr=sr.next// node in set s moved to next position
+result.size++;// size of intersection set increased by 1
+presult=presult.next;// node in intersection set moved to next position
+w=w.next;// node in this set moved to next position
+}
+
+else if(w.next.value>sr.next.value)
+{
+sr=sr.next;//node of smaller value to next position
+}
+
+}
+return result; //reture intersection set
+}
+
+
+
+
+
+public SLLSet difference(SLLSet s)
+{
+   SLLSet differ=this.copy()//creates difference set 
+   SLLSet result=this.intersection(s)//creating intersection set to find    intersection between this set and set s
+    
+    SLLNode presult;
+    presult=result.head; //initial condition of while loop
+    while(presult.next!=null)//stopping condition in intersection set
+    {
+    differ.remove(presult.next.value);// all the intersection values in the copied set are removed
+    presult=presult.next; //proceeds to next iteration of while loop
+    }
+    return differ; //difference set returned
+}
+
+ 
+
+
+
+
+public String toString()
+     {
+         String output = new String(); //new String created
+         SLLNode f;//node point to this set
+	 f=head.next; //initial condition
+         while(f!= null)// loops through this set
+         {
+             output += f.value + ", "; //each value of this set is added to output
+	     f=f.next; //next iteration of loop
+         }
+         return output; //String output is returned
+     }
+
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
